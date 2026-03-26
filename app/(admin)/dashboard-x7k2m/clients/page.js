@@ -20,7 +20,8 @@ export default async function AdminClientsPage({ searchParams }) {
   const session = await getAdminSession()
   if (!session) redirect('/admin/login')
 
-  const search = searchParams?.search || ''
+  const params = await searchParams
+  const search = params?.search || ''
 
   let query = supabaseAdmin
     .from('clients')
