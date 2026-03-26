@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Allow: /products/
+Allow: /pages/
+
+Disallow: /api/
+Disallow: /admin/
+Disallow: /client/
+Disallow: /login
+Disallow: /dashboard-x7k2m/
+
+Sitemap: https://yourdomain.com/sitemap.xml

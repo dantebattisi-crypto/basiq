@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=DM+Mono:wght@400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body { font-family: 'DM Sans', system-ui, sans-serif; }
+  * { box-sizing: border-box; }
+}
+
+@layer components {
+  /* ── Portal (admin + client) shared ─────────────────────────────── */
+  .portal-card {
+    @apply bg-[#253450] border border-[#344060] rounded-xl p-5;
+  }
+  .portal-input {
+    @apply w-full bg-[#2c3d5e] border border-[#3e4e72] rounded-lg px-3 py-2.5
+           text-[#f0ede8] placeholder-[#6a7a90] text-sm outline-none
+           focus:border-[#e8914a] focus:ring-2 focus:ring-[#e8914a]/20 transition-all;
+  }
+  .portal-btn-primary {
+    @apply bg-[#e8914a]/15 text-[#e8914a] border border-[#e8914a]/30
+           hover:bg-[#e8914a]/25 px-5 py-2.5 rounded-lg text-sm font-medium
+           transition-all cursor-pointer;
+  }
+  .portal-btn-ghost {
+    @apply text-[#a8b8cc] border border-[#344060] hover:bg-[#2c3d5e]
+           px-5 py-2.5 rounded-lg text-sm transition-all cursor-pointer;
+  }
+  .portal-label {
+    @apply text-[10px] uppercase tracking-widest text-[#6a7a90] font-medium;
+  }
+
+  /* ── Shop ────────────────────────────────────────────────────────── */
+  .prose h2 { @apply text-xl font-semibold text-gray-900 mb-3; }
+  .prose p  { @apply text-gray-600 leading-relaxed; }
+  .prose ul { @apply list-disc pl-5 space-y-1; }
+  .prose ol { @apply list-decimal pl-5 space-y-2; }
+}
