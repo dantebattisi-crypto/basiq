@@ -17,7 +17,7 @@ export default async function ClientDetailPage({ params }) {
       id, name, username, telegram, telegram_group, created_at, last_login,
       setups(id, type, current_step, action_step, status, start_date, est_date, notes, clickup_task_id, created_at, updated_at)
     `)
-    .eq('id', params.id)
+    .eq('id', (await params).id)
     .single()
 
   if (!client) notFound()

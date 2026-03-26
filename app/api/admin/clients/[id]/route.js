@@ -3,35 +3,34 @@ import bcrypt from 'bcryptjs'
 import { supabaseAdmin } from '../../../../../lib/supabase'
 import { getAdminSession } from '../../../../../lib/auth'
 
-// GET /api/admin/clients/[id]
 export async function GET(request, { params }) {
   const session = await getAdminSession()
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const { id } = await params
 
   const { data: client, error } = await supabaseAdmin
     .from('clients')
     .select(`
       id, username, name, telegram, telegram_group, created_at, last_login,
-      setups (
+      setups(
         id, type, current_step, action_step, status,
         start_date, est_date, notes, clickup_task_id, created_at, updated_at
       )
     `)
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
-  if (error || !client) {
-    return NextResponse.json({ error: 'Client not found' }, { status: 404 })
-  }
+  if (error || !client) return NextResponse.json({ error: 'Client not found' }, { status: 404 })
 
   return NextResponse.json({ client })
 }
 
-// PATCH /api/admin/clients/[id] — update client info
 export async function PATCH(request, { params }) {
   const session = await getAdminSession()
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
+  const { id } = await params
   const body = await request.json()
   const updates = {}
 
@@ -43,7 +42,7 @@ export async function PATCH(request, { params }) {
   const { data, error } = await supabaseAdmin
     .from('clients')
     .update(updates)
-    .eq('id', params.id)
+    .eq('id', id)
     .select()
     .single()
 
@@ -52,15 +51,16 @@ export async function PATCH(request, { params }) {
   return NextResponse.json({ client: data })
 }
 
-// DELETE /api/admin/clients/[id]
 export async function DELETE(request, { params }) {
   const session = await getAdminSession()
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
+  const { id } = await params
+
   const { error } = await supabaseAdmin
     .from('clients')
     .delete()
-    .eq('id', params.id)
+    .eq('id', id)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 

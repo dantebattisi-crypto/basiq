@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
-import { SETUP_TYPES } from '../../../../../../lib/setups'
+import { SETUP_TYPES } from '../../../../../../../lib/setups'
 
 const SEGMENT = process.env.NEXT_PUBLIC_ADMIN_SEGMENT || 'dashboard-x7k2m'
 

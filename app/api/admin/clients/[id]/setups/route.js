@@ -4,28 +4,27 @@ import { getAdminSession } from '../../../../../../lib/auth'
 import { createClickUpTask } from '../../../../../../lib/clickup'
 import { SETUP_TYPES } from '../../../../../../lib/setups'
 
-// POST /api/admin/clients/[id]/setups — create new setup
 export async function POST(request, { params }) {
   const session = await getAdminSession()
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
+  const { id: clientId } = await params
   const { type, start_date, est_date, notes } = await request.json()
 
   if (!type || !SETUP_TYPES[type]) {
     return NextResponse.json({ error: 'Invalid setup type' }, { status: 400 })
   }
 
-  // Get client name for ClickUp
   const { data: client } = await supabaseAdmin
     .from('clients')
     .select('name')
-    .eq('id', params.id)
+    .eq('id', clientId)
     .single()
 
   const { data: setup, error } = await supabaseAdmin
     .from('setups')
     .insert({
-      client_id: params.id,
+      client_id: clientId,
       type,
       current_step: 1,
       action_step: 0,
@@ -50,7 +49,6 @@ export async function POST(request, { params }) {
     setup.clickup_task_id = taskId
   }
 
-  // Log
   await supabaseAdmin.from('setup_logs').insert({
     setup_id: setup.id,
     admin_id: session.sub,
