@@ -51,11 +51,22 @@ export default async function ClientDashboardPage() {
 
   return (
     <div>
-      <div className="mb-10">
-        <p className="text-[#6a7a90] text-sm uppercase tracking-widest mb-2">Your portal</p>
-        <h1 className="text-3xl font-light text-[#f0ede8]">
-          Welcome, <span className="font-semibold">{session.name}</span>
-        </h1>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-10">
+        <div>
+          <p className="text-[#6a7a90] text-sm uppercase tracking-widest mb-2">Your portal</p>
+          <h1 className="text-2xl sm:text-3xl font-light text-[#f0ede8]">
+            Welcome, <span className="font-semibold">{session.name}</span>
+          </h1>
+        </div>
+        <a
+          href="https://shaded-feels-b1d.notion.site/All-setups-3377ce6d73468044bc94edbd6b682fb0?source=copy_link"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="self-start sm:self-center inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#e8914a]/15 border border-[#e8914a]/40 text-[#e8914a] text-sm font-semibold hover:bg-[#e8914a]/25 hover:border-[#e8914a]/70 hover:shadow-lg hover:shadow-[#e8914a]/10 active:scale-95 transition-all duration-150"
+        >
+          Our Services
+          <span className="text-base leading-none">→</span>
+        </a>
       </div>
 
       {/* Active setups */}
@@ -76,16 +87,18 @@ export default async function ClientDashboardPage() {
                 <Link
                   key={setup.id}
                   href={`/client/setup/${setup.id}`}
-                  className="portal-card flex items-center gap-5 hover:border-[#3e4e72] transition-all group"
+                  className="portal-card w-full overflow-hidden flex items-center gap-3 sm:gap-5 hover:border-[#3e4e72] transition-all group"
                 >
-                  <ProgressRing pct={progress} />
+                  <div className="flex-shrink-0">
+                    <ProgressRing pct={progress} />
+                  </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-medium text-[#f0ede8] group-hover:text-[#e8914a] transition-colors">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-1">
+                      <h3 className="font-medium text-[#f0ede8] group-hover:text-[#e8914a] transition-colors leading-tight">
                         {SETUP_TYPES[setup.type]?.label || setup.type}
                       </h3>
                       {setup.action_step > 0 && (
-                        <span className="text-xs bg-[#e8914a]/20 text-[#e8914a] px-2 py-0.5 rounded-full border border-[#e8914a]/30">
+                        <span className="text-xs bg-[#e8914a]/20 text-[#e8914a] px-2 py-0.5 rounded-full border border-[#e8914a]/30 whitespace-nowrap">
                           Action needed
                         </span>
                       )}
@@ -104,7 +117,7 @@ export default async function ClientDashboardPage() {
                       </p>
                     )}
                   </div>
-                  <span className="text-[#344060] group-hover:text-[#e8914a] transition-colors text-lg">→</span>
+                  <span className="flex-shrink-0 text-[#344060] group-hover:text-[#e8914a] transition-colors text-lg">→</span>
                 </Link>
               )
             })}

@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 @layer base {
-  body { font-family: 'DM Sans', system-ui, sans-serif; }
+  body { font-family: 'DM Sans', system-ui, sans-serif; overflow-x: hidden; }
   * { box-sizing: border-box; }
 }
 

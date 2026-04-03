@@ -8,17 +8,17 @@ export default async function ClientLayout({ children }) {
 
   return (
     <div className="min-h-screen bg-[#1e2d42] font-sans">
-      <header className="bg-[#1a2538] border-b border-[#2c3d5e] px-6 py-4">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="text-[#f0ede8] font-semibold text-sm">BasiQ</div>
-            <span className="text-[#344060]">·</span>
-            <span className="text-[#6a7a90] text-sm">{session.name}</span>
+      <header className="bg-[#1a2538] border-b border-[#2c3d5e] px-4 sm:px-6 py-4">
+        <div className="max-w-4xl mx-auto flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="text-[#f0ede8] font-semibold text-sm flex-shrink-0">BasiQ</div>
+            <span className="text-[#344060] flex-shrink-0">·</span>
+            <span className="text-[#6a7a90] text-sm truncate">{session.name}</span>
           </div>
           <LogoutButton />
         </div>
       </header>
-      <main className="max-w-4xl mx-auto px-6 py-10">{children}</main>
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10">{children}</main>
     </div>
   )
 }
