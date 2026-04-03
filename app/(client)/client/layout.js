@@ -4,7 +4,7 @@ import LogoutButton from '../../../components/client/LogoutButton'
 
 export default async function ClientLayout({ children }) {
   const session = await getClientSession()
-  if (!session) redirect('/login')
+  if (!session) redirect(`/${process.env.NEXT_PUBLIC_CLIENT_LOGIN_SEGMENT || 'xk7p2q'}`)
 
   return (
     <div className="min-h-screen bg-[#1e2d42] font-sans">

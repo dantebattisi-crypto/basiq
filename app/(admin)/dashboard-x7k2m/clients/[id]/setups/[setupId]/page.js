@@ -72,7 +72,21 @@ export default function SetupEditPage() {
   }
 
   const steps = SETUP_TYPES[setup.type]?.steps || []
-  const progress = getSetupProgress(setup.type, setup.current_step)
+  const completedSteps = setup.completed_steps || []
+  const progress = getSetupProgress(setup.type, completedSteps)
+
+  function toggleStep(n) {
+    const next = completedSteps.includes(n)
+      ? completedSteps.filter(s => s !== n)
+      : [...completedSteps, n]
+    update({ completed_steps: next })
+  }
+
+  function toggleActive(n) {
+    const current = setup.active_steps || []
+    const next = current.includes(n) ? current.filter(s => s !== n) : [...current, n]
+    update({ active_steps: next })
+  }
 
   return (
     <div className="max-w-3xl">
@@ -114,36 +128,40 @@ export default function SetupEditPage() {
         <div className="space-y-2">
           {steps.map((label, i) => {
             const n = i + 1
-            const isDone    = n < setup.current_step
-            const isActive  = n === setup.current_step
-            const isAction  = n === setup.action_step
-            const isPending = !isDone && !isActive
+            const isDone     = completedSteps.includes(n)
+            const isActive   = (setup.active_steps || []).includes(n)
+            const isAction   = n === setup.action_step
 
             return (
               <div
                 key={i}
                 className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
                   isDone   ? 'bg-green-900/20 border-green-500/15' :
+                  isActive ? 'bg-blue-900/20 border-blue-500/20' :
                   isAction ? 'bg-[#e8914a]/15 border-[#e8914a]/40' :
-                  isActive ? 'bg-[#e8914a]/08 border-[#e8914a]/20' :
-                  'bg-transparent border-transparent'
+                  'bg-transparent border-[#2c3d5e]'
                 }`}
               >
-                {/* Step indicator */}
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0 ${
-                  isDone   ? 'bg-green-700/50 text-green-300' :
-                  isAction ? 'bg-[#e8914a]/30 text-[#e8914a] border border-[#e8914a]' :
-                  isActive ? 'bg-[#e8914a]/20 text-[#e8914a] border border-[#e8914a]/50' :
-                  'bg-[#2c3d5e] text-[#6a7a90]'
-                }`}>
-                  {isDone ? '✓' : n}
-                </div>
+                {/* Toggle done */}
+                <button
+                  onClick={() => toggleStep(n)}
+                  title={isDone ? 'Mark as pending' : 'Mark as done'}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0 transition-all ${
+                    isDone
+                      ? 'bg-green-700/50 text-green-300 hover:bg-red-700/40 hover:text-red-300'
+                      : isActive
+                      ? 'bg-blue-700/40 text-blue-300 hover:bg-green-700/40 hover:text-green-300'
+                      : 'bg-[#2c3d5e] text-[#6a7a90] hover:bg-green-700/40 hover:text-green-300'
+                  }`}
+                >
+                  {isDone ? '✓' : isActive ? '▶' : n}
+                </button>
 
                 <span className={`text-sm flex-1 ${
-                  isDone    ? 'text-[#6a7a90] line-through' :
-                  isAction  ? 'text-[#e8914a] font-medium' :
-                  isActive  ? 'text-[#f0ede8] font-medium' :
-                  'text-[#6a7a90]'
+                  isDone   ? 'text-[#6a7a90] line-through' :
+                  isActive ? 'text-blue-300 font-medium' :
+                  isAction ? 'text-[#e8914a] font-medium' :
+                  'text-[#f0ede8]'
                 }`}>
                   {label}
                   {isAction && <span className="ml-2 text-xs bg-[#e8914a]/20 text-[#e8914a] px-1.5 py-0.5 rounded">action needed</span>}
@@ -151,12 +169,16 @@ export default function SetupEditPage() {
 
                 {/* Controls */}
                 <div className="flex gap-1.5 flex-shrink-0">
-                  {!isDone && n !== setup.current_step && (
+                  {!isDone && (
                     <button
-                      onClick={() => update({ current_step: n })}
-                      className="text-xs text-[#6a7a90] hover:text-[#e8914a] px-2 py-1 rounded hover:bg-[#e8914a]/10 transition-all"
+                      onClick={() => toggleActive(n)}
+                      className={`text-xs px-2 py-1 rounded transition-all ${
+                        isActive
+                          ? 'text-blue-300 bg-blue-500/15 hover:bg-blue-500/25'
+                          : 'text-[#6a7a90] hover:text-blue-300 hover:bg-blue-500/10'
+                      }`}
                     >
-                      Set active
+                      {isActive ? 'Clear ▶' : '▶ Active'}
                     </button>
                   )}
                   {setup.action_step === n ? (
@@ -164,9 +186,9 @@ export default function SetupEditPage() {
                       onClick={() => update({ action_step: 0 })}
                       className="text-xs text-[#e8914a] px-2 py-1 rounded bg-[#e8914a]/10 hover:bg-[#e8914a]/20 transition-all"
                     >
-                      Clear action
+                      Clear !
                     </button>
-                  ) : !isDone && (
+                  ) : (
                     <button
                       onClick={() => update({ action_step: n })}
                       className="text-xs text-[#6a7a90] hover:text-[#e8914a] px-2 py-1 rounded hover:bg-[#e8914a]/10 transition-all"
@@ -178,24 +200,6 @@ export default function SetupEditPage() {
               </div>
             )
           })}
-        </div>
-
-        {/* Quick nav */}
-        <div className="flex gap-2 mt-5 pt-5 border-t border-[#344060]">
-          <button
-            disabled={setup.current_step <= 1}
-            onClick={() => update({ current_step: setup.current_step - 1 })}
-            className="portal-btn-ghost text-xs disabled:opacity-30"
-          >
-            ← Previous step
-          </button>
-          <button
-            disabled={setup.current_step >= steps.length}
-            onClick={() => update({ current_step: setup.current_step + 1 })}
-            className="portal-btn-primary text-xs disabled:opacity-30"
-          >
-            Next step →
-          </button>
         </div>
       </div>
 

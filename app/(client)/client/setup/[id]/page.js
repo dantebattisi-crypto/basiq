@@ -6,7 +6,7 @@ import { SETUP_TYPES, NOTION_LINKS, getSetupProgress } from '../../../../../lib/
 
 export default async function ClientSetupPage({ params }) {
   const session = await getClientSession()
-  if (!session) redirect('/login')
+  if (!session) redirect(`/${process.env.NEXT_PUBLIC_CLIENT_LOGIN_SEGMENT || 'xk7p2q'}`)
 
   const { data: setup } = await supabaseAdmin
     .from('setups')
@@ -18,7 +18,9 @@ export default async function ClientSetupPage({ params }) {
   if (!setup) notFound()
 
   const steps = SETUP_TYPES[setup.type]?.steps || []
-  const progress = getSetupProgress(setup.type, setup.current_step)
+  const completedSteps = setup.completed_steps || []
+  const activeSteps = setup.active_steps || []
+  const progress = getSetupProgress(setup.type, completedSteps)
 
   // Get client info for contacts
   const { data: client } = await supabaseAdmin
@@ -76,8 +78,8 @@ export default async function ClientSetupPage({ params }) {
             <div className="space-y-2">
               {steps.map((label, i) => {
                 const n = i + 1
-                const isDone   = n < setup.current_step
-                const isActive = n === setup.current_step
+                const isDone   = completedSteps.includes(n)
+                const isActive = activeSteps.includes(n)
                 const isAction = n === setup.action_step
 
                 return (
@@ -86,23 +88,23 @@ export default async function ClientSetupPage({ params }) {
                     className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
                       isDone   ? 'bg-green-900/15 border-green-500/10' :
                       isAction ? 'bg-[#e8914a]/12 border-[#e8914a]/35' :
-                      isActive ? 'bg-[#e8914a]/07 border-[#e8914a]/18' :
+                      isActive ? 'bg-blue-900/15 border-blue-500/20' :
                       'bg-transparent border-transparent'
                     }`}
                   >
                     <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0 ${
                       isDone   ? 'bg-green-800/50 text-green-400' :
                       isAction ? 'bg-[#e8914a]/25 text-[#e8914a] border border-[#e8914a]' :
-                      isActive ? 'bg-[#e8914a]/15 text-[#e8914a] border border-[#e8914a]/40' :
+                      isActive ? 'bg-blue-800/40 text-blue-300 border border-blue-500/40' :
                       'bg-[#2c3d5e] text-[#6a7a90]'
                     }`}>
-                      {isDone ? '✓' : n}
+                      {isDone ? '✓' : isActive ? '▶' : n}
                     </div>
 
                     <span className={`text-sm flex-1 ${
                       isDone   ? 'text-[#6a7a90] line-through' :
                       isAction ? 'text-[#e8914a] font-medium' :
-                      isActive ? 'text-[#f0ede8] font-medium' :
+                      isActive ? 'text-blue-300 font-medium' :
                       'text-[#6a7a90]'
                     }`}>
                       {label}
@@ -122,8 +124,8 @@ export default async function ClientSetupPage({ params }) {
             <div className="flex gap-4 mt-5 pt-4 border-t border-[#344060] flex-wrap">
               {[
                 { dot: 'bg-green-500', label: 'Done' },
-                { dot: 'bg-[#e8914a]', label: 'In progress' },
-                { dot: 'bg-[#e8914a] opacity-50', label: 'Action needed' },
+                { dot: 'bg-blue-400', label: 'In progress' },
+                { dot: 'bg-[#e8914a]', label: 'Action needed' },
                 { dot: 'bg-[#344060]', label: 'Pending' },
               ].map(l => (
                 <div key={l.label} className="flex items-center gap-1.5 text-xs text-[#6a7a90]">

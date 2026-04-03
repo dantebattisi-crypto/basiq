@@ -9,7 +9,7 @@ const SEGMENT = process.env.NEXT_PUBLIC_ADMIN_SEGMENT || 'dashboard-x7k2m'
 
 export default async function ClientDetailPage({ params }) {
   const session = await getAdminSession()
-  if (!session) redirect('/admin/login')
+  if (!session) redirect(`/${process.env.NEXT_PUBLIC_ADMIN_LOGIN_SEGMENT || 'n3r8v5'}`)
 
   const { data: client } = await supabaseAdmin
     .from('clients')

@@ -15,7 +15,7 @@ function Sidebar() {
 
   async function logout() {
     await fetch('/api/auth/admin/logout', { method: 'POST' })
-    router.push('/admin/login')
+    router.push(`/${process.env.NEXT_PUBLIC_ADMIN_LOGIN_SEGMENT || 'n3r8v5'}`)
   }
 
   return (

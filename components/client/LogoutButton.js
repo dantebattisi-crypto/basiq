@@ -6,7 +6,7 @@ export default function LogoutButton() {
 
   async function logout() {
     await fetch('/api/auth/client/logout', { method: 'POST' })
-    router.push('/login')
+    router.push(`/${process.env.NEXT_PUBLIC_CLIENT_LOGIN_SEGMENT || 'xk7p2q'}`)
   }
 
   return (

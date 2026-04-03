@@ -68,7 +68,7 @@ export default function NewClientPage() {
           <div className="bg-[#1e2d42] rounded-xl p-4 space-y-3 font-mono text-sm mb-6">
             <div className="flex justify-between">
               <span className="text-[#6a7a90]">Login URL</span>
-              <span className="text-[#e8914a]">{window.location.origin}/login</span>
+              <span className="text-[#e8914a]">{window.location.origin}/{process.env.NEXT_PUBLIC_CLIENT_LOGIN_SEGMENT || 'xk7p2q'}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-[#6a7a90]">Username</span>

@@ -18,7 +18,7 @@ function statusBadge(status) {
 
 export default async function AdminClientsPage({ searchParams }) {
   const session = await getAdminSession()
-  if (!session) redirect('/admin/login')
+  if (!session) redirect(`/${process.env.NEXT_PUBLIC_ADMIN_LOGIN_SEGMENT || 'n3r8v5'}`)
 
   const params = await searchParams
   const search = params?.search || ''

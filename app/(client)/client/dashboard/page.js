@@ -38,7 +38,7 @@ function statusBadge(status) {
 
 export default async function ClientDashboardPage() {
   const session = await getClientSession()
-  if (!session) redirect('/login')
+  if (!session) redirect(`/${process.env.NEXT_PUBLIC_CLIENT_LOGIN_SEGMENT || 'xk7p2q'}`)
 
   const { data: setups } = await supabaseAdmin
     .from('setups')
@@ -66,9 +66,11 @@ export default async function ClientDashboardPage() {
           </h2>
           <div className="grid gap-4">
             {active.map(setup => {
-              const progress = getSetupProgress(setup.type, setup.current_step)
+              const completedSteps = setup.completed_steps || []
+              const activeSteps = setup.active_steps || []
               const steps = SETUP_TYPES[setup.type]?.steps || []
-              const currentStepName = steps[setup.current_step - 1] || '—'
+              const progress = getSetupProgress(setup.type, completedSteps)
+              const activeNames = activeSteps.map(n => steps[n - 1]).filter(Boolean)
 
               return (
                 <Link
@@ -89,8 +91,13 @@ export default async function ClientDashboardPage() {
                       )}
                     </div>
                     <p className="text-sm text-[#6a7a90] truncate">
-                      Step {setup.current_step}/{steps.length} — {currentStepName}
+                      {completedSteps.length}/{steps.length} steps done
                     </p>
+                    {activeNames.length > 0 && (
+                      <p className="text-xs text-blue-400 truncate mt-0.5">
+                        ▶ {activeNames.join(' · ')}
+                      </p>
+                    )}
                     {setup.est_date && (
                       <p className="text-xs text-[#344060] mt-1">
                         Est. {new Date(setup.est_date).toLocaleDateString('en-GB')}

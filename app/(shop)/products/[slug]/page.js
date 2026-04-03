@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getProductBySlug, products } from '../../../../lib/products'
+import BookingModal from '../../../../components/client/BookingModal'
 
 export async function generateStaticParams() {
   return products.map(p => ({ slug: p.slug }))
@@ -10,7 +11,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const product = getProductBySlug(params.slug)
   if (!product) return {}
-  return { title: `${product.name} — LumiGlow Beauty`, description: product.description }
+  return { title: `${product.name} — BasiQ IT Services`, description: product.description }
 }
 
 function StarRating({ rating, reviews }) {
@@ -48,27 +49,28 @@ export default function ProductPage({ params }) {
         <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-50">
           <Image src={product.image} alt={product.name} fill className="object-cover" priority />
           {product.compareAt && (
-            <span className="absolute top-4 right-4 bg-rose-500 text-white text-xs font-bold px-3 py-1.5 rounded-full">
-              SALE
+            <span className="absolute top-4 right-4 bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded-full">
+              PROMO
             </span>
           )}
         </div>
 
         {/* Info */}
         <div className="flex flex-col">
-          <p className="text-xs font-semibold uppercase tracking-widest text-rose-400 mb-2">
+          <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-2">
             {product.category}
           </p>
           <h1 className="text-3xl font-bold text-gray-900 mb-3">{product.name}</h1>
           <StarRating rating={product.rating} reviews={product.reviews} />
 
           <div className="flex items-baseline gap-3 mt-5">
+            <span className="text-xs text-gray-400 text-lg">from</span>
             <span className="text-3xl font-bold text-gray-900">€{product.price.toFixed(2)}</span>
             {product.compareAt && (
               <span className="text-lg text-gray-400 line-through">€{product.compareAt.toFixed(2)}</span>
             )}
             {product.compareAt && (
-              <span className="text-sm font-semibold text-rose-500">
+              <span className="text-sm font-semibold text-blue-600">
                 Save €{(product.compareAt - product.price).toFixed(2)}
               </span>
             )}
@@ -80,39 +82,32 @@ export default function ProductPage({ params }) {
           <ul className="mt-5 space-y-2">
             {product.benefits.map(b => (
               <li key={b} className="flex items-center gap-2 text-sm text-gray-700">
-                <span className="text-rose-400">✓</span> {b}
+                <span className="text-blue-500">✓</span> {b}
               </li>
             ))}
           </ul>
 
           {/* Actions */}
-          <div className="mt-8 space-y-3">
-            <button className="w-full bg-gray-900 text-white py-4 rounded-xl font-semibold hover:bg-gray-800 transition-colors text-sm">
-              Add to Cart — €{product.price.toFixed(2)}
-            </button>
-            <button className="w-full bg-[#003087] text-white py-4 rounded-xl font-semibold hover:bg-[#002070] transition-colors text-sm flex items-center justify-center gap-2">
-              <span className="font-bold italic text-[#009cde]">Pay</span>
-              <span className="font-bold italic text-[#003087] bg-white px-1 rounded">Pal</span>
-              <span className="text-sm">Checkout</span>
-            </button>
+          <div className="mt-8">
+            <BookingModal productName={product.name} productPrice={product.price} />
           </div>
 
           {/* Trust */}
           <div className="mt-6 flex flex-wrap gap-4 text-xs text-gray-500">
-            <span>🚚 Free shipping over €50</span>
-            <span>↩️ 30-day returns</span>
-            <span>🔒 Secure payment</span>
+            <span>💬 Free initial consultation</span>
+            <span>✅ Satisfaction guaranteed</span>
+            <span>🔒 Secure & confidential</span>
           </div>
 
-          {/* How to use */}
+          {/* Process */}
           <div className="mt-8 border-t border-gray-100 pt-6">
-            <h3 className="font-semibold text-gray-900 mb-2 text-sm">How to use</h3>
+            <h3 className="font-semibold text-gray-900 mb-2 text-sm">Our process</h3>
             <p className="text-sm text-gray-600 leading-relaxed">{product.howToUse}</p>
           </div>
 
-          {/* Ingredients */}
+          {/* Technologies */}
           <div className="mt-4 border-t border-gray-100 pt-4">
-            <h3 className="font-semibold text-gray-900 mb-2 text-sm">Key ingredients</h3>
+            <h3 className="font-semibold text-gray-900 mb-2 text-sm">Technologies used</h3>
             <p className="text-xs text-gray-500 leading-relaxed">{product.ingredients}</p>
           </div>
         </div>
@@ -120,15 +115,15 @@ export default function ProductPage({ params }) {
 
       {/* Related */}
       <section className="mt-20">
-        <h2 className="text-2xl font-bold text-gray-900 mb-8">You might also like</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-8">Related Services</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {related.map(p => (
             <Link key={p.id} href={`/products/${p.slug}`} className="group block">
               <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-50 mb-3">
                 <Image src={p.image} alt={p.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
-              <p className="font-medium text-sm text-gray-900 group-hover:text-rose-500 transition-colors leading-tight">{p.name}</p>
-              <p className="text-sm font-bold text-gray-900 mt-1">€{p.price.toFixed(2)}</p>
+              <p className="font-medium text-sm text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">{p.name}</p>
+              <p className="text-xs text-gray-400 mt-1">from €{p.price.toLocaleString()}</p>
             </Link>
           ))}
         </div>

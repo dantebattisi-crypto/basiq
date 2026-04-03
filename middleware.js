@@ -29,7 +29,7 @@ export async function middleware(request) {
     // Require completed 2FA
     if (!payload.totp_verified) {
       const url = request.nextUrl.clone()
-      url.pathname = '/admin/login'
+      url.pathname = `/${process.env.NEXT_PUBLIC_ADMIN_LOGIN_SEGMENT || 'n3r8v5'}`
       url.searchParams.set('step', '2fa')
       return NextResponse.redirect(url)
     }
@@ -43,7 +43,7 @@ export async function middleware(request) {
     const payload = token ? await verifyToken(token) : null
 
     if (!payload || payload.role !== 'client') {
-      return NextResponse.redirect(new URL('/login', request.url))
+      return NextResponse.redirect(new URL(`/${process.env.NEXT_PUBLIC_CLIENT_LOGIN_SEGMENT || 'xk7p2q'}`, request.url))
     }
 
     return NextResponse.next()

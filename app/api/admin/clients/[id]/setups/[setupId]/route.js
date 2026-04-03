@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '../../../../../../../lib/supabase'
 import { getAdminSession } from '../../../../../../../lib/auth'
 import { updateClickUpTask } from '../../../../../../../lib/clickup'
+import { SETUP_TYPES } from '../../../../../../../lib/setups'
 
 export async function GET(request, { params }) {
   const session = await getAdminSession()
@@ -39,13 +40,21 @@ export async function PATCH(request, { params }) {
 
   const updates = {}
   const oldValues = {}
-  const allowed = ['current_step', 'action_step', 'status', 'est_date', 'notes']
+  const allowed = ['current_step', 'action_step', 'active_steps', 'status', 'est_date', 'notes', 'completed_steps']
 
   for (const key of allowed) {
     if (body[key] !== undefined) {
       oldValues[key] = current[key]
       updates[key] = body[key]
     }
+  }
+
+  // Auto-compute current_step from completed_steps for backwards compatibility
+  if (updates.completed_steps !== undefined) {
+    const steps = SETUP_TYPES[current.type]?.steps || []
+    const allNums = steps.map((_, i) => i + 1)
+    const uncompleted = allNums.filter(n => !updates.completed_steps.includes(n))
+    updates.current_step = uncompleted.length > 0 ? Math.min(...uncompleted) : steps.length + 1
   }
 
   const { data: setup, error } = await supabaseAdmin

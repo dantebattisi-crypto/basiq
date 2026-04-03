@@ -15,8 +15,10 @@ function statusColor(status) {
 
 export default function SetupCard({ setup, clientId, muted = false }) {
   const steps = SETUP_TYPES[setup.type]?.steps || []
-  const progress = getSetupProgress(setup.type, setup.current_step)
-  const currentStepName = steps[setup.current_step - 1] || '—'
+  const completedSteps = setup.completed_steps || []
+  const progress = getSetupProgress(setup.type, completedSteps)
+  const firstUncompletedIdx = steps.findIndex((_, i) => !completedSteps.includes(i + 1))
+  const currentStepName = firstUncompletedIdx >= 0 ? steps[firstUncompletedIdx] : 'Completed'
 
   return (
     <div className={`portal-card ${muted ? 'opacity-60' : ''}`}>
@@ -24,7 +26,7 @@ export default function SetupCard({ setup, clientId, muted = false }) {
         <div>
           <h3 className="font-medium text-[#f0ede8]">{SETUP_TYPES[setup.type]?.label || setup.type}</h3>
           <p className="text-xs text-[#6a7a90] mt-0.5">
-            Step {setup.current_step}/{steps.length} — {currentStepName}
+            {completedSteps.length}/{steps.length} steps done — {currentStepName}
           </p>
         </div>
         <div className="flex items-center gap-2">
