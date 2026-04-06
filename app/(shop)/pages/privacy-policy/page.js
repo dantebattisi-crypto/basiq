@@ -40,7 +40,7 @@ export default function PrivacyPolicyPage() {
 
         <section>
           <h2 className="text-xl font-semibold text-gray-900 mb-3">6. Your Rights</h2>
-          <p>Under GDPR and applicable data protection laws, you have the right to access, correct, or delete your personal data. You may also object to or restrict processing of your data. To exercise these rights, contact us at <a href="mailto:privacy@basiq.com" className="text-blue-600 hover:underline">privacy@basiq.com</a>.</p>
+          <p>Under GDPR and applicable data protection laws, you have the right to access, correct, or delete your personal data. You may also object to or restrict processing of your data. To exercise these rights, contact us at <a href="mailto:info@basiq-solutions.com" className="text-blue-600 hover:underline">info@basiq-solutions.com</a>.</p>
         </section>
 
         <section>
@@ -50,7 +50,8 @@ export default function PrivacyPolicyPage() {
 
         <section>
           <h2 className="text-xl font-semibold text-gray-900 mb-3">8. Contact Us</h2>
-          <p>If you have any questions about this Privacy Policy, please contact us at <a href="mailto:privacy@basiq.com" className="text-blue-600 hover:underline">privacy@basiq.com</a> or write to: BasiQ Ltd, 123 Tech Street, London, EC1A 1BB, United Kingdom.</p>
+          <p>If you have any questions about this Privacy Policy, please contact us at <a href="mailto:info@basiq-solutions.com" className="text-blue-600 hover:underline">info@basiq-solutions.com</a> or write to:</p>
+          <p className="mt-2 font-medium text-gray-700">BASIQ SOLUTIONS LTD<br />Company No. 17112784<br />167-169 Great Portland Street, Fifth Floor<br />London, England, W1W 5PF</p>
         </section>
       </div>
     </div>

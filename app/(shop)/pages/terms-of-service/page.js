@@ -53,7 +53,7 @@ export default function TermsOfServicePage() {
 
         <section>
           <h2 className="text-xl font-semibold text-gray-900 mb-3">10. Contact</h2>
-          <p>For questions regarding these Terms, contact us at <a href="mailto:legal@basiq.com" className="text-blue-600 hover:underline">legal@basiq.com</a> or BasiQ Ltd, 123 Tech Street, London, EC1A 1BB, United Kingdom.</p>
+          <p>For questions regarding these Terms, contact us at <a href="mailto:info@basiq-solutions.com" className="text-blue-600 hover:underline">info@basiq-solutions.com</a> or write to: BASIQ SOLUTIONS LTD, Company No. 17112784, 167-169 Great Portland Street, Fifth Floor, London, England, W1W 5PF.</p>
         </section>
       </div>
     </div>

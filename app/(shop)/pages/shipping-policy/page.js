@@ -82,7 +82,7 @@ export default function ShippingPolicyPage() {
 
         <section>
           <h2 className="text-xl font-semibold text-gray-900 mb-3">Questions?</h2>
-          <p>If you have any questions about how we work, feel free to reach out at <a href="mailto:contact@basiq.com" className="text-blue-600 hover:underline">contact@basiq.com</a>. We are happy to walk you through the process before you commit to anything.</p>
+          <p>If you have any questions about how we work, feel free to reach out at <a href="mailto:info@basiq-solutions.com" className="text-blue-600 hover:underline">info@basiq-solutions.com</a>. We are happy to walk you through the process before you commit to anything.</p>
         </section>
       </div>
     </div>

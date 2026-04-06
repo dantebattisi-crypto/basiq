@@ -29,7 +29,7 @@ export default function RefundPolicyPage() {
         <section>
           <h2 className="text-xl font-semibold text-gray-900 mb-3">How to Request a Refund or Raise a Dispute</h2>
           <ol className="list-decimal pl-5 space-y-2">
-            <li>Email us at <a href="mailto:contact@basiq.com" className="text-blue-600 hover:underline">contact@basiq.com</a> with your project reference and a description of the issue</li>
+            <li>Email us at <a href="mailto:info@basiq-solutions.com" className="text-blue-600 hover:underline">info@basiq-solutions.com</a> with your project reference and a description of the issue</li>
             <li>We will acknowledge your request within 1 business day</li>
             <li>Our team will review the situation and propose a resolution within 3 business days</li>
             <li>If a refund is approved, it will be processed to your original payment method within 5–7 business days</li>
@@ -52,7 +52,7 @@ export default function RefundPolicyPage() {
 
         <section>
           <h2 className="text-xl font-semibold text-gray-900 mb-3">Questions</h2>
-          <p>If you have any questions about our refund policy, please contact us at <a href="mailto:contact@basiq.com" className="text-blue-600 hover:underline">contact@basiq.com</a>. We are always happy to discuss any concerns before, during, or after your project.</p>
+          <p>If you have any questions about our refund policy, please contact us at <a href="mailto:info@basiq-solutions.com" className="text-blue-600 hover:underline">info@basiq-solutions.com</a>. We are always happy to discuss any concerns before, during, or after your project.</p>
         </section>
       </div>
     </div>

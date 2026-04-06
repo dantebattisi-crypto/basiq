@@ -56,10 +56,10 @@ function ShopFooter() {
         </div>
         <div className="border-t border-gray-200 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-gray-400">
-            © {new Date().getFullYear()} BasiQ Ltd. All rights reserved.
+            © {new Date().getFullYear()} BASIQ SOLUTIONS LTD. All rights reserved.
           </p>
           <p className="text-xs text-gray-400">
-            Registered in England & Wales · Company No. 12345678
+            Company No. 17112784 · 167-169 Great Portland Street, Fifth Floor, London, W1W 5PF
           </p>
         </div>
       </div>
