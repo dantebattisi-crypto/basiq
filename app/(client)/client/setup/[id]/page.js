@@ -2,7 +2,7 @@ import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getClientSession } from '../../../../../lib/auth'
 import { supabaseAdmin } from '../../../../../lib/supabase'
-import { SETUP_TYPES, NOTION_LINKS, getSetupProgress } from '../../../../../lib/setups'
+import { SETUP_TYPES, getSetupProgress } from '../../../../../lib/setups'
 
 export default async function ClientSetupPage({ params }) {
   const session = await getClientSession()
@@ -22,18 +22,19 @@ export default async function ClientSetupPage({ params }) {
   const activeSteps = setup.active_steps || []
   const progress = getSetupProgress(setup.type, completedSteps)
 
-  // Get client info for contacts
-  const { data: client } = await supabaseAdmin
-    .from('clients')
-    .select('telegram, telegram_group')
-    .eq('id', session.sub)
-    .single()
+  // Get client info and notion links in parallel
+  const [{ data: client }, { data: settingsRows }] = await Promise.all([
+    supabaseAdmin.from('clients').select('telegram, telegram_group').eq('id', session.sub).single(),
+    supabaseAdmin.from('settings').select('key, value').in('key', ['notion_onboarding', 'notion_proxy', 'notion_warmup', 'notion_policy']),
+  ])
+
+  const s = Object.fromEntries((settingsRows || []).map(r => [r.key, r.value]))
 
   const guides = [
-    { icon: '✅', title: 'Onboarding checklist', desc: 'Step-by-step from start to first sale', url: NOTION_LINKS.onboarding },
-    { icon: '🌍', title: 'Proxy guide', desc: 'GonzoProxy + OctoBrowser setup', url: NOTION_LINKS.proxy },
-    { icon: '🔥', title: 'Warm-up SOP', desc: 'Stripe / PayPal / SP rules', url: NOTION_LINKS.warmup },
-    { icon: '📋', title: 'Service policy', desc: 'Refunds, replacements, timelines', url: NOTION_LINKS.policy },
+    { icon: '✅', title: 'Onboarding checklist', desc: 'Step-by-step from start to first sale', url: s.notion_onboarding },
+    { icon: '🌍', title: 'Proxy guide',          desc: 'GonzoProxy + OctoBrowser setup',       url: s.notion_proxy },
+    { icon: '🔥', title: 'Warm-up SOP',          desc: 'Stripe / PayPal / SP rules',            url: s.notion_warmup },
+    { icon: '📋', title: 'Service policy',        desc: 'Refunds, replacements, timelines',     url: s.notion_policy },
   ]
 
   return (
