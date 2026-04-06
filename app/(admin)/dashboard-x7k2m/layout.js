@@ -5,6 +5,7 @@ import Link from 'next/link'
 const SEGMENT = process.env.NEXT_PUBLIC_ADMIN_SEGMENT || 'dashboard-x7k2m'
 
 const LINKS = [
+  { href: `/${SEGMENT}/setups`,   label: 'Setups',    icon: '📋' },
   { href: `/${SEGMENT}/clients`,  label: 'Clients',   icon: '👥' },
   { href: `/${SEGMENT}/settings`, label: 'Settings',  icon: '⚙️' },
   { href: `/${SEGMENT}/setup-2fa`, label: '2FA',      icon: '🔐' },

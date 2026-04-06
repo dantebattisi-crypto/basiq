@@ -8,6 +8,7 @@ const SEGMENT = process.env.NEXT_PUBLIC_ADMIN_SEGMENT || 'dashboard-x7k2m'
 
 const STATUS_OPTIONS = ['active', 'completed', 'paused', 'cancelled']
 
+
 function statusColor(status) {
   const map = {
     active:    'text-blue-400 bg-blue-500/10 border-blue-500/20',
@@ -30,6 +31,7 @@ export default function SetupEditPage() {
   const [error, setError] = useState('')
   const [notes, setNotes] = useState('')
   const [estDate, setEstDate] = useState('')
+  const [issueNote, setIssueNote] = useState('')
 
   useEffect(() => {
     fetch(`/api/admin/clients/${clientId}/setups/${setupId}`)
@@ -38,6 +40,7 @@ export default function SetupEditPage() {
         setSetup(d.setup)
         setNotes(d.setup?.notes || '')
         setEstDate(d.setup?.est_date || '')
+        setIssueNote(d.setup?.issue_note || '')
         setLoading(false)
       })
   }, [clientId, setupId])
@@ -230,6 +233,37 @@ export default function SetupEditPage() {
             onChange={e => setEstDate(e.target.value)}
             onBlur={() => update({ est_date: estDate })}
           />
+        </div>
+
+        <div>
+          <label className="portal-label block mb-2">
+            Issue note
+            <span className="ml-2 text-xs text-[#6a7a90] font-normal">visible only to admins</span>
+          </label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              className="portal-input flex-1"
+              placeholder="Describe any current problem…"
+              value={issueNote}
+              onChange={e => setIssueNote(e.target.value)}
+              onBlur={() => update({ issue_note: issueNote })}
+            />
+            {issueNote && (
+              <button
+                onClick={() => { setIssueNote(''); update({ issue_note: '' }) }}
+                className="px-3 py-2 text-xs text-[#6a7a90] hover:text-red-400 border border-[#2c3d5e] rounded-lg transition-colors"
+                title="Clear issue"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+          {issueNote && (
+            <p className="mt-1.5 text-xs text-red-400/70 flex items-center gap-1">
+              <span>⚠</span> Issue flagged — visible on the Setups overview
+            </p>
+          )}
         </div>
 
         <div>

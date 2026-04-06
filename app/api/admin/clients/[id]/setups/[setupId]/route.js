@@ -40,7 +40,7 @@ export async function PATCH(request, { params }) {
 
   const updates = {}
   const oldValues = {}
-  const allowed = ['current_step', 'action_step', 'active_steps', 'status', 'est_date', 'notes', 'completed_steps']
+  const allowed = ['current_step', 'action_step', 'active_steps', 'status', 'est_date', 'notes', 'completed_steps', 'priority', 'issue_note']
 
   for (const key of allowed) {
     if (body[key] !== undefined) {
