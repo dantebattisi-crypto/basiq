@@ -15,7 +15,7 @@ export default async function ClientDetailPage({ params }) {
     .from('clients')
     .select(`
       id, name, username, telegram, telegram_group, created_at, last_login,
-      setups(id, type, current_step, action_step, status, start_date, est_date, notes, clickup_task_id, created_at, updated_at)
+      setups(id, type, current_step, action_step, active_steps, completed_steps, status, start_date, est_date, notes, clickup_task_id, created_at, updated_at)
     `)
     .eq('id', (await params).id)
     .single()
@@ -36,20 +36,20 @@ export default async function ClientDetailPage({ params }) {
 
       {/* Client header */}
       <div className="portal-card mb-6">
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-semibold text-[#f0ede8]">{client.name}</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold text-[#f0ede8]">{client.name}</h1>
             <p className="text-[#6a7a90] text-sm font-mono mt-0.5">@{client.username}</p>
           </div>
           <Link
             href={`/${SEGMENT}/clients/${client.id}/setups/new`}
-            className="portal-btn-primary text-sm"
+            className="portal-btn-primary text-sm flex-shrink-0"
           >
             + New setup
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+        <div className="grid grid-cols-2 gap-3 mt-5">
           {[
             { label: 'Telegram', value: client.telegram || '—' },
             { label: 'Group', value: client.telegram_group ? 'Set' : '—' },

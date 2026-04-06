@@ -22,20 +22,20 @@ export default function SetupCard({ setup, clientId, muted = false }) {
 
   return (
     <div className={`portal-card ${muted ? 'opacity-60' : ''}`}>
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <h3 className="font-medium text-[#f0ede8]">{SETUP_TYPES[setup.type]?.label || setup.type}</h3>
-          <p className="text-xs text-[#6a7a90] mt-0.5">
-            {completedSteps.length}/{steps.length} steps done — {currentStepName}
+      <div className="flex items-start justify-between gap-2 mb-4">
+        <div className="min-w-0">
+          <h3 className="font-medium text-[#f0ede8] leading-tight">{SETUP_TYPES[setup.type]?.label || setup.type}</h3>
+          <p className="text-xs text-[#6a7a90] mt-0.5 truncate">
+            {completedSteps.length}/{steps.length} steps — {currentStepName}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <span className={`text-xs px-2.5 py-1 rounded-full border ${statusColor(setup.status)}`}>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <span className={`text-xs px-2.5 py-1 rounded-full border whitespace-nowrap ${statusColor(setup.status)}`}>
             {setup.status}
           </span>
           <Link
             href={`/${SEGMENT}/clients/${clientId}/setups/${setup.id}`}
-            className="text-xs text-[#e8914a] hover:underline"
+            className="text-xs text-[#e8914a] hover:underline whitespace-nowrap"
           >
             Edit →
           </Link>

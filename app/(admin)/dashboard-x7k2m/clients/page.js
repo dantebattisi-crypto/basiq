@@ -60,7 +60,7 @@ export default async function AdminClientsPage({ searchParams }) {
         />
       </form>
 
-      {/* Table */}
+      {/* List */}
       {!clients?.length ? (
         <div className="portal-card text-center py-16">
           <p className="text-[#6a7a90] text-sm">No clients yet.</p>
@@ -69,63 +69,80 @@ export default async function AdminClientsPage({ searchParams }) {
           </Link>
         </div>
       ) : (
-        <div className="portal-card overflow-hidden p-0">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-[#344060] text-left">
-                <th className="px-5 py-3.5 text-[#6a7a90] font-medium text-xs uppercase tracking-wider">Client</th>
-                <th className="px-5 py-3.5 text-[#6a7a90] font-medium text-xs uppercase tracking-wider">Username</th>
-                <th className="px-5 py-3.5 text-[#6a7a90] font-medium text-xs uppercase tracking-wider">Setups</th>
-                <th className="px-5 py-3.5 text-[#6a7a90] font-medium text-xs uppercase tracking-wider">Last login</th>
-                <th className="px-5 py-3.5 text-[#6a7a90] font-medium text-xs uppercase tracking-wider"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {clients.map((client, i) => (
-                <tr
-                  key={client.id}
-                  className={`border-b border-[#2c3d5e] hover:bg-[#2c3d5e]/50 transition-colors ${i === clients.length - 1 ? 'border-b-0' : ''}`}
-                >
-                  <td className="px-5 py-4">
-                    <div className="font-medium text-[#f0ede8]">{client.name}</div>
-                    {client.telegram && (
-                      <div className="text-xs text-[#6a7a90] mt-0.5">{client.telegram}</div>
-                    )}
-                  </td>
-                  <td className="px-5 py-4 text-[#a8b8cc] font-mono text-xs">{client.username}</td>
-                  <td className="px-5 py-4">
-                    <div className="flex flex-wrap gap-1.5">
-                      {client.setups?.length === 0 && (
-                        <span className="text-[#6a7a90] text-xs">No setups</span>
-                      )}
-                      {client.setups?.map(s => (
-                        <span
-                          key={s.id}
-                          className={`text-xs px-2 py-0.5 rounded-full border ${statusBadge(s.status)}`}
-                        >
-                          {SETUP_TYPES[s.type]?.label || s.type}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="px-5 py-4 text-[#6a7a90] text-xs">
-                    {client.last_login
-                      ? new Date(client.last_login).toLocaleDateString('en-GB')
-                      : 'Never'}
-                  </td>
-                  <td className="px-5 py-4 text-right">
-                    <Link
-                      href={`/${SEGMENT}/clients/${client.id}`}
-                      className="text-[#e8914a] text-xs hover:underline"
-                    >
-                      Manage →
-                    </Link>
-                  </td>
+        <>
+          {/* Desktop table */}
+          <div className="hidden md:block portal-card overflow-hidden p-0">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-[#344060] text-left">
+                  <th className="px-5 py-3.5 text-[#6a7a90] font-medium text-xs uppercase tracking-wider">Client</th>
+                  <th className="px-5 py-3.5 text-[#6a7a90] font-medium text-xs uppercase tracking-wider">Username</th>
+                  <th className="px-5 py-3.5 text-[#6a7a90] font-medium text-xs uppercase tracking-wider">Setups</th>
+                  <th className="px-5 py-3.5 text-[#6a7a90] font-medium text-xs uppercase tracking-wider">Last login</th>
+                  <th className="px-5 py-3.5 text-[#6a7a90] font-medium text-xs uppercase tracking-wider"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {clients.map((client, i) => (
+                  <tr
+                    key={client.id}
+                    className={`border-b border-[#2c3d5e] hover:bg-[#2c3d5e]/50 transition-colors ${i === clients.length - 1 ? 'border-b-0' : ''}`}
+                  >
+                    <td className="px-5 py-4">
+                      <div className="font-medium text-[#f0ede8]">{client.name}</div>
+                      {client.telegram && <div className="text-xs text-[#6a7a90] mt-0.5">{client.telegram}</div>}
+                    </td>
+                    <td className="px-5 py-4 text-[#a8b8cc] font-mono text-xs">{client.username}</td>
+                    <td className="px-5 py-4">
+                      <div className="flex flex-wrap gap-1.5">
+                        {client.setups?.length === 0 && <span className="text-[#6a7a90] text-xs">No setups</span>}
+                        {client.setups?.map(s => (
+                          <span key={s.id} className={`text-xs px-2 py-0.5 rounded-full border ${statusBadge(s.status)}`}>
+                            {SETUP_TYPES[s.type]?.label || s.type}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                    <td className="px-5 py-4 text-[#6a7a90] text-xs">
+                      {client.last_login ? new Date(client.last_login).toLocaleDateString('en-GB') : 'Never'}
+                    </td>
+                    <td className="px-5 py-4 text-right">
+                      <Link href={`/${SEGMENT}/clients/${client.id}`} className="text-[#e8914a] text-xs hover:underline">
+                        Manage →
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile cards */}
+          <div className="md:hidden space-y-3">
+            {clients.map(client => (
+              <Link key={client.id} href={`/${SEGMENT}/clients/${client.id}`} className="portal-card block hover:border-[#3e4e72] transition-colors">
+                <div className="flex items-start justify-between mb-2">
+                  <div>
+                    <div className="font-medium text-[#f0ede8]">{client.name}</div>
+                    <div className="text-xs text-[#6a7a90] font-mono mt-0.5">@{client.username}</div>
+                  </div>
+                  <span className="text-[#e8914a] text-sm">→</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5 mt-2">
+                  {client.setups?.length === 0 && <span className="text-[#6a7a90] text-xs">No setups</span>}
+                  {client.setups?.map(s => (
+                    <span key={s.id} className={`text-xs px-2 py-0.5 rounded-full border ${statusBadge(s.status)}`}>
+                      {SETUP_TYPES[s.type]?.label || s.type}
+                    </span>
+                  ))}
+                </div>
+                <div className="text-xs text-[#344060] mt-2">
+                  Last login: {client.last_login ? new Date(client.last_login).toLocaleDateString('en-GB') : 'Never'}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </>
       )}
     </div>
   )

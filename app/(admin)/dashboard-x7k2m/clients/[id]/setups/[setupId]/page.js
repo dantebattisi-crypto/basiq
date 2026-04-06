@@ -63,13 +63,8 @@ export default function SetupEditPage() {
     }
   }
 
-  if (loading) {
-    return <div className="text-[#6a7a90] text-sm">Loading…</div>
-  }
-
-  if (!setup) {
-    return <div className="text-red-400 text-sm">Setup not found.</div>
-  }
+  if (loading) return <div className="text-[#6a7a90] text-sm">Loading…</div>
+  if (!setup) return <div className="text-red-400 text-sm">Setup not found.</div>
 
   const steps = SETUP_TYPES[setup.type]?.steps || []
   const completedSteps = setup.completed_steps || []
@@ -91,22 +86,22 @@ export default function SetupEditPage() {
   return (
     <div className="max-w-3xl">
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm mb-8">
+      <div className="flex items-center gap-2 text-sm mb-6 flex-wrap">
         <Link href={`/${SEGMENT}/clients`} className="text-[#6a7a90] hover:text-[#a8b8cc]">Clients</Link>
         <span className="text-[#344060]">/</span>
         <Link href={`/${SEGMENT}/clients/${clientId}`} className="text-[#6a7a90] hover:text-[#a8b8cc]">Client</Link>
         <span className="text-[#344060]">/</span>
-        <span className="text-[#f0ede8]">{SETUP_TYPES[setup.type]?.label}</span>
+        <span className="text-[#f0ede8] truncate">{SETUP_TYPES[setup.type]?.label}</span>
       </div>
 
-      <div className="flex items-start justify-between mb-8">
+      <div className="flex items-start justify-between gap-3 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold text-[#f0ede8]">{SETUP_TYPES[setup.type]?.label}</h1>
+          <h1 className="text-xl sm:text-2xl font-semibold text-[#f0ede8]">{SETUP_TYPES[setup.type]?.label}</h1>
           <p className="text-sm text-[#6a7a90] mt-1">
             Started {setup.start_date ? new Date(setup.start_date).toLocaleDateString('en-GB') : '—'}
           </p>
         </div>
-        <span className={`text-xs px-3 py-1.5 rounded-full border font-medium ${statusColor(setup.status)}`}>
+        <span className={`flex-shrink-0 text-xs px-3 py-1.5 rounded-full border font-medium ${statusColor(setup.status)}`}>
           {setup.status}
         </span>
       </div>
@@ -128,14 +123,14 @@ export default function SetupEditPage() {
         <div className="space-y-2">
           {steps.map((label, i) => {
             const n = i + 1
-            const isDone     = completedSteps.includes(n)
-            const isActive   = (setup.active_steps || []).includes(n)
-            const isAction   = n === setup.action_step
+            const isDone   = completedSteps.includes(n)
+            const isActive = (setup.active_steps || []).includes(n)
+            const isAction = n === setup.action_step
 
             return (
               <div
                 key={i}
-                className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
+                className={`flex items-start gap-3 p-3 rounded-lg border transition-all ${
                   isDone   ? 'bg-green-900/20 border-green-500/15' :
                   isActive ? 'bg-blue-900/20 border-blue-500/20' :
                   isAction ? 'bg-[#e8914a]/15 border-[#e8914a]/40' :
@@ -146,7 +141,7 @@ export default function SetupEditPage() {
                 <button
                   onClick={() => toggleStep(n)}
                   title={isDone ? 'Mark as pending' : 'Mark as done'}
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0 transition-all ${
+                  className={`w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-semibold mt-0.5 transition-all ${
                     isDone
                       ? 'bg-green-700/50 text-green-300 hover:bg-red-700/40 hover:text-red-300'
                       : isActive
@@ -157,45 +152,51 @@ export default function SetupEditPage() {
                   {isDone ? '✓' : isActive ? '▶' : n}
                 </button>
 
-                <span className={`text-sm flex-1 ${
-                  isDone   ? 'text-[#6a7a90] line-through' :
-                  isActive ? 'text-blue-300 font-medium' :
-                  isAction ? 'text-[#e8914a] font-medium' :
-                  'text-[#f0ede8]'
-                }`}>
-                  {label}
-                  {isAction && <span className="ml-2 text-xs bg-[#e8914a]/20 text-[#e8914a] px-1.5 py-0.5 rounded">action needed</span>}
-                </span>
+                <div className="flex-1 min-w-0">
+                  <span className={`text-sm leading-snug ${
+                    isDone   ? 'text-[#6a7a90] line-through' :
+                    isActive ? 'text-blue-300 font-medium' :
+                    isAction ? 'text-[#e8914a] font-medium' :
+                    'text-[#f0ede8]'
+                  }`}>
+                    {label}
+                    {isAction && (
+                      <span className="ml-2 text-xs bg-[#e8914a]/20 text-[#e8914a] px-1.5 py-0.5 rounded">
+                        action needed
+                      </span>
+                    )}
+                  </span>
 
-                {/* Controls */}
-                <div className="flex gap-1.5 flex-shrink-0">
-                  {!isDone && (
-                    <button
-                      onClick={() => toggleActive(n)}
-                      className={`text-xs px-2 py-1 rounded transition-all ${
-                        isActive
-                          ? 'text-blue-300 bg-blue-500/15 hover:bg-blue-500/25'
-                          : 'text-[#6a7a90] hover:text-blue-300 hover:bg-blue-500/10'
-                      }`}
-                    >
-                      {isActive ? 'Clear ▶' : '▶ Active'}
-                    </button>
-                  )}
-                  {setup.action_step === n ? (
-                    <button
-                      onClick={() => update({ action_step: 0 })}
-                      className="text-xs text-[#e8914a] px-2 py-1 rounded bg-[#e8914a]/10 hover:bg-[#e8914a]/20 transition-all"
-                    >
-                      Clear !
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => update({ action_step: n })}
-                      className="text-xs text-[#6a7a90] hover:text-[#e8914a] px-2 py-1 rounded hover:bg-[#e8914a]/10 transition-all"
-                    >
-                      ! Action
-                    </button>
-                  )}
+                  {/* Controls */}
+                  <div className="flex flex-wrap gap-1.5 mt-1.5">
+                    {!isDone && (
+                      <button
+                        onClick={() => toggleActive(n)}
+                        className={`text-xs px-2 py-1 rounded transition-all ${
+                          isActive
+                            ? 'text-blue-300 bg-blue-500/15 hover:bg-blue-500/25'
+                            : 'text-[#6a7a90] hover:text-blue-300 hover:bg-blue-500/10'
+                        }`}
+                      >
+                        {isActive ? 'Clear ▶' : '▶ Active'}
+                      </button>
+                    )}
+                    {setup.action_step === n ? (
+                      <button
+                        onClick={() => update({ action_step: 0 })}
+                        className="text-xs text-[#e8914a] px-2 py-1 rounded bg-[#e8914a]/10 hover:bg-[#e8914a]/20 transition-all"
+                      >
+                        Clear !
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => update({ action_step: n })}
+                        className="text-xs text-[#6a7a90] hover:text-[#e8914a] px-2 py-1 rounded hover:bg-[#e8914a]/10 transition-all"
+                      >
+                        ! Action
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             )
