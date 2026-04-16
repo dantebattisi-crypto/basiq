@@ -4,7 +4,7 @@ import { verifyWebhookSignature } from '../../../../lib/clickup'
 import { SETUP_TYPES } from '../../../../lib/setups'
 
 const CLICKUP_BASE = 'https://api.clickup.com/api/v2'
-const LOOP_GUARD_SECONDS = 10
+const LOOP_GUARD_SECONDS = 15
 
 async function fetchClickUpTask(taskId) {
   const res = await fetch(`${CLICKUP_BASE}/task/${taskId}`, {
