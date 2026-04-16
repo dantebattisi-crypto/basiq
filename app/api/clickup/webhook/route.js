@@ -100,11 +100,13 @@ export async function POST(request) {
 
     } else {
       // --- MAIN TASK: update setup status ---
+      // 'trouble' = active in our system, clients don't see it
       if (newStatus === 'complete' && setup.status !== 'completed') {
         updates.status = 'completed'
       } else if (newStatus === 'in progress' && setup.status === 'completed') {
         updates.status = 'active'
       }
+      // 'trouble' / 'to do' — no DB status change
     }
 
     if (Object.keys(updates).length === 0) return NextResponse.json({ ok: true })
