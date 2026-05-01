@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, after } from 'next/server'
 import { supabaseAdmin } from '../../../../../../lib/supabase'
 import { getAdminSession } from '../../../../../../lib/auth'
 import { createClickUpTask } from '../../../../../../lib/clickup'
@@ -39,21 +39,21 @@ export async function POST(request, { params }) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  // Create ClickUp task
-  const taskId = await createClickUpTask(setup, client?.name || 'Unknown')
-  if (taskId) {
-    await supabaseAdmin
-      .from('setups')
-      .update({ clickup_task_id: taskId })
-      .eq('id', setup.id)
-    setup.clickup_task_id = taskId
-  }
+  after(async () => {
+    const taskId = await createClickUpTask(setup, client?.name || 'Unknown')
+    if (taskId) {
+      await supabaseAdmin
+        .from('setups')
+        .update({ clickup_task_id: taskId })
+        .eq('id', setup.id)
+    }
 
-  await supabaseAdmin.from('setup_logs').insert({
-    setup_id: setup.id,
-    admin_id: session.sub,
-    action: 'created',
-    new_value: { type, current_step: 1 },
+    await supabaseAdmin.from('setup_logs').insert({
+      setup_id: setup.id,
+      admin_id: session.sub,
+      action: 'created',
+      new_value: { type, current_step: 1 },
+    })
   })
 
   return NextResponse.json({ setup }, { status: 201 })

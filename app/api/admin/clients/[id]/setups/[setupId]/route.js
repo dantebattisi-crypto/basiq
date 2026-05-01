@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, after } from 'next/server'
 import { supabaseAdmin } from '../../../../../../../lib/supabase'
 import { getAdminSession } from '../../../../../../../lib/auth'
 import { updateClickUpTask } from '../../../../../../../lib/clickup'
@@ -66,16 +66,18 @@ export async function PATCH(request, { params }) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  const { data: client } = await supabaseAdmin
-    .from('clients').select('name').eq('id', id).single()
-  await updateClickUpTask(setup.clickup_task_id, setup, client?.name || 'Unknown')
+  after(async () => {
+    const { data: client } = await supabaseAdmin
+      .from('clients').select('name').eq('id', id).single()
+    await updateClickUpTask(setup.clickup_task_id, setup, client?.name || 'Unknown')
 
-  await supabaseAdmin.from('setup_logs').insert({
-    setup_id: setup.id,
-    admin_id: session.sub,
-    action: 'updated',
-    old_value: oldValues,
-    new_value: updates,
+    await supabaseAdmin.from('setup_logs').insert({
+      setup_id: setup.id,
+      admin_id: session.sub,
+      action: 'updated',
+      old_value: oldValues,
+      new_value: updates,
+    })
   })
 
   return NextResponse.json({ setup })
