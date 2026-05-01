@@ -59,7 +59,7 @@ export default async function ClientDashboardPage() {
           </h1>
         </div>
         <a
-          href="https://shaded-feels-b1d.notion.site/All-setups-3377ce6d73468044bc94edbd6b682fb0?source=copy_link"
+          href="https://basiq-setup.notion.site/all-setups?source=dashboard"
           target="_blank"
           rel="noopener noreferrer"
           className="self-start sm:self-center inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#e8914a]/15 border border-[#e8914a]/40 text-[#e8914a] text-sm font-semibold hover:bg-[#e8914a]/25 hover:border-[#e8914a]/70 hover:shadow-lg hover:shadow-[#e8914a]/10 active:scale-95 transition-all duration-150"
