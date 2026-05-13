@@ -170,7 +170,7 @@ export default function InvoicesPage() {
         <div class="inv-body">
           <div class="inv-hdr">
             <div class="inv-brand">
-              <img class="inv-logo" src="${LOGO_SRC}" alt="BasiQ">
+              <img src="${LOGO_SRC}" alt="BasiQ" style="display:block;width:auto;height:auto;max-height:80px;max-width:260px;">
               <div class="inv-tagline">Simple. Discreet. It Works.</div>
             </div>
             <div class="inv-right">
