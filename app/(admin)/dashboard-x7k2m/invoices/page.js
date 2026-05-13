@@ -445,10 +445,10 @@ body{font-family:'Inter',sans-serif;background:white;-webkit-print-color-adjust:
       </div>
 
       {/* MAIN LAYOUT */}
-      <div className="-m-4 sm:-m-8 flex overflow-hidden" style={{ height: 'calc(100vh - 56px)' }}>
+      <div className="-m-4 sm:-m-8 flex overflow-hidden h-[calc(100vh-56px)] md:h-screen">
 
         {/* ── FORM PANEL ── */}
-        <div className="w-[360px] flex-shrink-0 bg-[#0f172a] border-r border-[#2c3d5e] flex flex-col overflow-hidden">
+        <div className="relative w-[360px] flex-shrink-0 bg-[#0f172a] border-r border-[#2c3d5e] flex flex-col overflow-hidden">
 
           {/* Header */}
           <div className="px-4 py-3 border-b border-[#2c3d5e] flex items-center gap-3 bg-[#1a2538] flex-shrink-0">
@@ -569,7 +569,7 @@ body{font-family:'Inter',sans-serif;background:white;-webkit-print-color-adjust:
         {/* ── PREVIEW PANEL ── */}
         <div className="flex-1 overflow-y-auto bg-[#0d1526] flex justify-center py-10 px-6">
           <div id="invOuter" className="inv-outer">
-            <div id="invoicePage"></div>
+            <div id="invoicePage" className="inv"></div>
           </div>
         </div>
 
