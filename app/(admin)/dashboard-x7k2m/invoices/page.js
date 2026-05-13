@@ -249,7 +249,7 @@ body{font-family:'Inter',sans-serif;background:white;-webkit-print-color-adjust:
 .inv-body{flex:1;padding:52px 56px 0;}
 .inv-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:34px;}
 .inv-brand{display:flex;flex-direction:column;gap:10px;max-width:320px;}
-.inv-logo{height:100px;max-width:280px;object-fit:contain;object-position:left center;}
+.inv-logo{display:block;width:auto;max-height:100px;max-width:280px;}
 .inv-tagline{font-size:13px;font-weight:700;color:var(--amber);letter-spacing:2.5px;text-transform:uppercase;}
 .inv-right{display:flex;flex-direction:column;align-items:flex-end;}
 .inv-title{font-size:56px;font-weight:800;color:var(--navy);letter-spacing:-2px;line-height:1;margin-bottom:14px;}
@@ -357,7 +357,7 @@ body{font-family:'Inter',sans-serif;background:white;-webkit-print-color-adjust:
         .inv-body { flex:1; padding:52px 56px 0; }
         .inv-hdr { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:34px; }
         .inv-brand { display:flex; flex-direction:column; gap:10px; max-width:320px; }
-        .inv-logo { height:100px; max-width:280px; object-fit:contain; object-position:left center; }
+        .inv-logo { display:block; width:auto; max-height:100px; max-width:280px; }
         .inv-tagline { font-size:13px; font-weight:700; color:#E8922B; letter-spacing:2.5px; text-transform:uppercase; }
         .inv-right { display:flex; flex-direction:column; align-items:flex-end; }
         .inv-title { font-size:56px; font-weight:800; color:#1A2A4A; letter-spacing:-2px; line-height:1; margin-bottom:14px; }
